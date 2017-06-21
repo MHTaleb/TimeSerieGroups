@@ -8,10 +8,19 @@ package view;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JTree;
+import javax.swing.ListModel;
+import javax.swing.event.TreeSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -27,18 +36,20 @@ import utils.TimeSerieGroup;
  */
 public class ServicesView extends javax.swing.JPanel {
 
-    private void initComboBoxes() {
-        DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboBox1.getModel();
+    private void initComboBoxes(int boxesIndex) {
+        System.out.println("boxes index = " + boxesIndex);
+        DefaultComboBoxModel<String> model;
+        model = (DefaultComboBoxModel<String>) jComboBox1.getModel();
         model.removeAllElements();
-        int index= JCBCompositions.getSelectedIndex();
-        ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(index);
+        ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(boxesIndex);
         int i = 0;
         for (TimeSerieGroup timeSerieGroup : servicesDatabase) {
             model.addElement("s" + i);
             i++;
         }
 
-        DefaultComboBoxModel<String> model1 = (DefaultComboBoxModel<String>) jComboBox2.getModel();
+        DefaultComboBoxModel<String> model1;
+        model1 = (DefaultComboBoxModel<String>) jComboBox2.getModel();
         model1.removeAllElements();
         i = 0;
         for (TimeSerieGroup timeSerieGroup : servicesDatabase) {
@@ -62,12 +73,16 @@ public class ServicesView extends javax.swing.JPanel {
     public ServicesView() {
 
         initComponents();
-        initTreeView();
-        initComboBoxes();
+        jTrees = new JTree[]{jTree1, jTree2, jTree3};
+        initTreeView(0);
+        initTreeView(01);
+        initTreeView(02);
+
+        initComboBoxes(0);
         jTable1.getTableHeader().setFont(new Font("BankGothic Md BT", 1, 18));
         final Color colorBlueTheme = new Color(91, 68, 131);
         jTable1.getTableHeader().setForeground(colorBlueTheme);
-        refreshServiceComposition();
+
     }
 
     /**
@@ -103,6 +118,7 @@ public class ServicesView extends javax.swing.JPanel {
         jComboBoxListClient = new javax.swing.JComboBox<>();
         JLBDistanceQA4 = new javax.swing.JLabel();
         JLBMeilleurService = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
@@ -110,8 +126,33 @@ public class ServicesView extends javax.swing.JPanel {
         jSlider1 = new javax.swing.JSlider();
         jButtonAjouter = new javax.swing.JButton();
         JLBTailleValue = new javax.swing.JLabel();
-        JBAddComposition = new javax.swing.JButton();
-        JCBCompositions = new javax.swing.JComboBox<>();
+        JLBcout4 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTree2 = new javax.swing.JTree();
+        JLBcout2 = new javax.swing.JLabel();
+        jSlider2 = new javax.swing.JSlider();
+        jButtonAjouter1 = new javax.swing.JButton();
+        JLBTailleValue1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTree3 = new javax.swing.JTree();
+        JLBcout3 = new javax.swing.JLabel();
+        jSlider3 = new javax.swing.JSlider();
+        jButtonAjouter2 = new javax.swing.JButton();
+        JLBTailleValue2 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jButtonAjouter3 = new javax.swing.JButton();
+        jButtonAjouter4 = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTableComposition = new javax.swing.JTable();
+        jSlider4 = new javax.swing.JSlider();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 68, 131)));
@@ -359,7 +400,7 @@ public class ServicesView extends javax.swing.JPanel {
                     .addComponent(JLBServiceValue, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JLBService, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addGap(7, 7, 7)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -368,6 +409,24 @@ public class ServicesView extends javax.swing.JPanel {
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
+
+        jTabbedPane1.setBackground(new java.awt.Color(91, 68, 131));
+        jTabbedPane1.setOpaque(true);
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
+        jTabbedPane1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTabbedPane1PropertyChange(evt);
+            }
+        });
+        jTabbedPane1.addVetoableChangeListener(new java.beans.VetoableChangeListener() {
+            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {
+                jTabbedPane1VetoableChange(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(91, 68, 131));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 68, 131)));
@@ -578,52 +637,23 @@ public class ServicesView extends javax.swing.JPanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider1, org.jdesktop.beansbinding.ELProperty.create("${value}"), JLBTailleValue, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        JBAddComposition.setBackground(new java.awt.Color(91, 68, 131));
-        JBAddComposition.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
-        JBAddComposition.setForeground(new java.awt.Color(255, 255, 255));
-        JBAddComposition.setText("<html>Nouvelle <br> Composition");
-        JBAddComposition.setBorderPainted(false);
-        JBAddComposition.setContentAreaFilled(false);
-        JBAddComposition.setOpaque(true);
-        JBAddComposition.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JBAddCompositionActionPerformed(evt);
-            }
-        });
-
-        JCBCompositions.setEditable(true);
-        JCBCompositions.setFont(new java.awt.Font("BankGothic Md BT", 1, 14)); // NOI18N
-        JCBCompositions.setForeground(new java.awt.Color(91, 68, 131));
-        JCBCompositions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        JCBCompositions.setBorder(null);
-        JCBCompositions.setOpaque(false);
-        JCBCompositions.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                JCBCompositionsPropertyChange(evt);
-            }
-        });
-        JCBCompositions.addVetoableChangeListener(new java.beans.VetoableChangeListener() {
-            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {
-                JCBCompositionsVetoableChange(evt);
-            }
-        });
+        JLBcout4.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        JLBcout4.setForeground(new java.awt.Color(255, 255, 255));
+        JLBcout4.setText("Classe de service : 1");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(JCBCompositions, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(JBAddComposition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JLBcout4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(JLBcout1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JLBTailleValue, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -634,11 +664,9 @@ public class ServicesView extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(JCBCompositions, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JBAddComposition, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(JLBcout4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButtonAjouter, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -648,26 +676,776 @@ public class ServicesView extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        jTabbedPane1.addTab("CS1", jPanel2);
+
+        jPanel5.setBackground(new java.awt.Color(91, 68, 131));
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 68, 131)));
+
+        jTree2.setFont(new java.awt.Font("BankGothic Lt BT", 1, 12)); // NOI18N
+        jTree2.setForeground(new java.awt.Color(91, 68, 131));
+        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste des services");
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("s1");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("0");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("1");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("2");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("3");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("4");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode1.add(treeNode2);
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("s2");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("0");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("1");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("2");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("3");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("4");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode1.add(treeNode2);
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("s3");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("0");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("1");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("2");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("3");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("4");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode1.add(treeNode2);
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("s4");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("0");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("1");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("2");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("3");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("4");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode1.add(treeNode2);
+        jTree2.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jTree2.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                jTree2ValueChanged(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTree2);
+
+        JLBcout2.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        JLBcout2.setForeground(new java.awt.Color(255, 255, 255));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider2, org.jdesktop.beansbinding.ELProperty.create("${value}"), JLBcout2, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jSlider2.setBackground(new java.awt.Color(91, 68, 131));
+        jSlider2.setMaximum(250);
+        jSlider2.setMinimum(1);
+
+        jButtonAjouter1.setBackground(new java.awt.Color(91, 68, 131));
+        jButtonAjouter1.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        jButtonAjouter1.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAjouter1.setText("Ajouter");
+        jButtonAjouter1.setBorderPainted(false);
+        jButtonAjouter1.setContentAreaFilled(false);
+        jButtonAjouter1.setOpaque(true);
+        jButtonAjouter1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAjouter1ActionPerformed(evt);
+            }
+        });
+
+        JLBTailleValue1.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        JLBTailleValue1.setForeground(new java.awt.Color(255, 255, 255));
+        JLBTailleValue1.setText("Taille");
+
+        jLabel1.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Classe de service : 2");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(JLBTailleValue1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JLBcout2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonAjouter1)))
+                .addGap(4, 4, 4))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(JLBTailleValue1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JLBcout2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAjouter1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("CS2", jPanel5);
+
+        jPanel6.setBackground(new java.awt.Color(91, 68, 131));
+        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 68, 131)));
+
+        jTree3.setFont(new java.awt.Font("BankGothic Lt BT", 1, 12)); // NOI18N
+        jTree3.setForeground(new java.awt.Color(91, 68, 131));
+        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liste des services");
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("s1");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("0");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("1");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("2");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("3");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("4");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode1.add(treeNode2);
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("s2");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("0");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("1");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("2");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("3");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("4");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode1.add(treeNode2);
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("s3");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("0");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("1");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("2");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("3");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("4");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode1.add(treeNode2);
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("s4");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("0");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("1");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("2");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("3");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("4");
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("debit");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("cout");
+        treeNode3.add(treeNode4);
+        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("réputation");
+        treeNode3.add(treeNode4);
+        treeNode2.add(treeNode3);
+        treeNode1.add(treeNode2);
+        jTree3.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jTree3.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                jTree3ValueChanged(evt);
+            }
+        });
+        jScrollPane4.setViewportView(jTree3);
+
+        JLBcout3.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        JLBcout3.setForeground(new java.awt.Color(255, 255, 255));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider3, org.jdesktop.beansbinding.ELProperty.create("${value}"), JLBcout3, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jSlider3.setBackground(new java.awt.Color(91, 68, 131));
+        jSlider3.setMaximum(250);
+        jSlider3.setMinimum(1);
+
+        jButtonAjouter2.setBackground(new java.awt.Color(91, 68, 131));
+        jButtonAjouter2.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        jButtonAjouter2.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAjouter2.setText("Ajouter");
+        jButtonAjouter2.setBorderPainted(false);
+        jButtonAjouter2.setContentAreaFilled(false);
+        jButtonAjouter2.setOpaque(true);
+        jButtonAjouter2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAjouter2ActionPerformed(evt);
+            }
+        });
+
+        JLBTailleValue2.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        JLBTailleValue2.setForeground(new java.awt.Color(255, 255, 255));
+        JLBTailleValue2.setText("Taille :");
+
+        jLabel2.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Classe de service : 3");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(JLBTailleValue2, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JLBcout3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonAjouter2)))
+                .addGap(4, 4, 4))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(JLBTailleValue2, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                    .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLBcout3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAjouter2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("CS3", jPanel6);
+
+        jPanel7.setBackground(new java.awt.Color(91, 68, 131));
+
+        jLabel3.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Composition de Service de CS [1,2,3]");
+
+        jButtonAjouter3.setBackground(new java.awt.Color(91, 68, 131));
+        jButtonAjouter3.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        jButtonAjouter3.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAjouter3.setText("Calculer la composition");
+        jButtonAjouter3.setBorderPainted(false);
+        jButtonAjouter3.setContentAreaFilled(false);
+        jButtonAjouter3.setOpaque(true);
+        jButtonAjouter3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAjouter3ActionPerformed(evt);
+            }
+        });
+
+        jButtonAjouter4.setBackground(new java.awt.Color(91, 68, 131));
+        jButtonAjouter4.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        jButtonAjouter4.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAjouter4.setText("Top K Services");
+        jButtonAjouter4.setBorderPainted(false);
+        jButtonAjouter4.setContentAreaFilled(false);
+        jButtonAjouter4.setOpaque(true);
+        jButtonAjouter4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAjouter4ActionPerformed(evt);
+            }
+        });
+
+        jTableComposition.setFont(new java.awt.Font("BankGothic Md BT", 1, 14)); // NOI18N
+        jTableComposition.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "CS1", "CS2", "CS3"
+            }
+        ));
+        jTableComposition.setFillsViewportHeight(true);
+        jTableComposition.setGridColor(new java.awt.Color(91, 68, 131));
+        jTableComposition.setSelectionBackground(new java.awt.Color(53, 76, 99));
+        jTableComposition.setShowVerticalLines(false);
+        jScrollPane6.setViewportView(jTableComposition);
+        if (jTableComposition.getColumnModel().getColumnCount() > 0) {
+            jTableComposition.getColumnModel().getColumn(0).setResizable(false);
+            jTableComposition.getColumnModel().getColumn(1).setResizable(false);
+            jTableComposition.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jSlider4.setMaximum(50);
+        jSlider4.setValue(15);
+        jSlider4.setOpaque(false);
+
+        jLabel4.setFont(new java.awt.Font("BankGothic Md BT", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jSlider4, org.jdesktop.beansbinding.ELProperty.create("${value}"), jLabel4, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jList1.setBackground(new java.awt.Color(91, 68, 131));
+        jList1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
+        jList1.setFont(new java.awt.Font("BankGothic Md BT", 1, 24)); // NOI18N
+        jList1.setForeground(new java.awt.Color(255, 255, 255));
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jList1.setFocusTraversalPolicyProvider(true);
+        jScrollPane7.setViewportView(jList1);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonAjouter3, javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE))
+                        .addGap(6, 6, 6))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jButtonAjouter4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSlider4, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE))
+                        .addContainerGap())))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonAjouter3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jSlider4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAjouter4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Composition de Service", jPanel7);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        distanceOneToOne();
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void distanceOneToOne() throws NumberFormatException {
+        // TODO add your handling code here:
+        try {
+
+            String selectedService1 = (String) jComboBox1.getSelectedItem();
+            String selectedService2 = (String) jComboBox2.getSelectedItem();
+            int selectedServiceID = Integer.parseInt(selectedService1.substring(1));
+            int selectedServiceID2 = Integer.parseInt(selectedService2.substring(1));
+            int index = jTabbedPane1.getSelectedIndex();
+
+            ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(index);
+            TimeSerieGroup tsg1 = servicesDatabase.get(selectedServiceID);
+            TimeSerieGroup tsg2 = servicesDatabase.get(selectedServiceID2);
+
+            float calculerDistanceQA = tsg1.lireEnUneSeulRequete().calculerDistanceQA(tsg2.lireEnUneSeulRequete());
+            JLBDistanceQA.setText("Distance QA : " + calculerDistanceQA);
+
+            QOSRelation qosr1 = new QOSRelation(tsg1);
+            QOSRelation qosr2 = new QOSRelation(tsg2);
+
+            float QRDistance = Matrice.DistanceQosr(qosr1.distance(qosr2));
+            JLBDistanceQOS.setText("Distance QOS : " + QRDistance);
+
+            float finalDistance = (float) Math.sqrt(QRDistance * calculerDistanceQA);
+
+            JLBDistanceFinal.setText("Distance Finale : " + finalDistance);
+        } catch (Exception e) {
+        }
+    }
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        try {
+            String clientSelectionner = (String) jComboBoxListClient.getSelectedItem();
+            int selectedClientID = Integer.parseInt(clientSelectionner.substring(1));
+            int index = jTabbedPane1.getSelectedIndex();
+            ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(index);
+            TimeSerieGroup Client = servicesDatabase.get(selectedClientID);
+            ArrayList<Float> listDistanceQA = new ArrayList<>();
+            ArrayList<Float> listDistanceQOS = new ArrayList<>();
+            ArrayList<Float> listDistanceFINAL = new ArrayList<>();
+            for (TimeSerieGroup serviceEnCours : servicesDatabase) {
+                float calculerDistanceQA = Client.lireEnUneSeulRequete().calculerDistanceQA(serviceEnCours.lireEnUneSeulRequete());
+                listDistanceQA.add(calculerDistanceQA);
+                QOSRelation qosr1 = new QOSRelation(Client);
+                QOSRelation qosr2 = new QOSRelation(serviceEnCours);
+                float DistanceQosr = Matrice.DistanceQosr(qosr1.distance(qosr2));
+                listDistanceQOS.add(DistanceQosr);
+                float finalDistance = (float) Math.sqrt(DistanceQosr * calculerDistanceQA);
+
+                listDistanceFINAL.add(finalDistance);
+
+            }
+
+            float minimalCourant = Float.MAX_VALUE;
+            int candidatGagnant = 0;
+            index = 0;
+            for (Float candidatCourant : listDistanceFINAL) {
+                if (candidatCourant < minimalCourant && candidatCourant > 0) {
+                    minimalCourant = candidatCourant;
+                    candidatGagnant = index;
+                }
+                index++;
+            }
+
+            JLBMeilleurService.setText("Meilleur Service : S" + candidatGagnant);
+            JLBMeilleurDistanceQA.setText("Distance QA : " + listDistanceQA.get(candidatGagnant));
+            JLBMeilleurDistanceQOS.setText("Distance QOS : " + listDistanceQOS.get(candidatGagnant));
+            JLBMeilleurDistanceFinal.setText("Distance Finale : " + listDistanceFINAL.get(candidatGagnant));
+        } catch (Exception e) {
+        }
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButtonAjouter2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouter2ActionPerformed
+        int index = 2;
+        for (int i = 0; i < jSlider1.getValue(); i++) {
+            Principal.getServicesDatabase(index).add(GenerateTSG(150));
+
+        }
+
+        initTreeView(2);
+        initComboBoxes(2);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonAjouter2ActionPerformed
+
+    private void jTree3ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTree3ValueChanged
+        // TODO add your handling code here:
+        jTreeMouseEvent(evt);
+    }//GEN-LAST:event_jTree3ValueChanged
+
+    private void jButtonAjouter1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouter1ActionPerformed
+        int index = 1;
+        for (int i = 0; i < jSlider1.getValue(); i++) {
+            Principal.getServicesDatabase(index).add(GenerateTSG(150));
+
+        }
+
+        initTreeView(1);
+        initComboBoxes(1);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonAjouter1ActionPerformed
+
+    private void jTree2ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTree2ValueChanged
+        // TODO add your handling code here:
+        jTreeMouseEvent(evt);
+
+    }//GEN-LAST:event_jTree2ValueChanged
+
+    private void jButtonAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouterActionPerformed
+
+        // 1 generation des Services
+        int index = 0;
+        for (int i = 0; i < jSlider1.getValue(); i++) {
+            Principal.getServicesDatabase(index).add(GenerateTSG(150));
+
+        }
+
+        initTreeView(0);
+        initComboBoxes(0);
+    }//GEN-LAST:event_jButtonAjouterActionPerformed
+
     private void jTree1ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTree1ValueChanged
+        jTreeMouseEvent(evt);
+    }//GEN-LAST:event_jTree1ValueChanged
+
+    private void jTreeMouseEvent(TreeSelectionEvent evt) {
         // TODO add your handling code here:
         TreePath tp = evt.getNewLeadSelectionPath();
         if (tp != null) {
@@ -679,7 +1457,7 @@ public class ServicesView extends javax.swing.JPanel {
                     try {
                         int selectedServiceID = Integer.parseInt(selectedService.substring(1));
                         System.out.println("selected id = " + selectedServiceID);
-                        int index = JCBCompositions.getSelectedIndex();
+                        int index = 0;
                         TimeSerieGroup tsg = Principal.getServicesDatabase(index).get(selectedServiceID);
                         ArrayList<Query> lireToutesLesRequetes = tsg.lireToutesLesRequetes();
                         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -724,132 +1502,161 @@ public class ServicesView extends javax.swing.JPanel {
             } catch (Exception e) {
             }
         }
-    }//GEN-LAST:event_jTree1ValueChanged
+    }
 
-    private void jButtonAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouterActionPerformed
-
-        // 1 generation des Services
-        int index = JCBCompositions.getSelectedIndex();
-        for (int i = 0; i < jSlider1.getValue(); i++) {
-            Principal.getServicesDatabase(index).add(GenerateTSG(150));
-
-        }
-        
-        initTreeView();
-        initComboBoxes();
-
-    }//GEN-LAST:event_jButtonAjouterActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jTabbedPane1VetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {//GEN-FIRST:event_jTabbedPane1VetoableChange
         // TODO add your handling code here:
-        String selectedService1 = (String) jComboBox1.getSelectedItem();
-        String selectedService2 = (String) jComboBox2.getSelectedItem();
-        int selectedServiceID = Integer.parseInt(selectedService1.substring(1));
-        int selectedServiceID2 = Integer.parseInt(selectedService2.substring(1));
-        int index= JCBCompositions.getSelectedIndex();
 
-        ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(index);
-        TimeSerieGroup tsg1 = servicesDatabase.get(selectedServiceID);
-        TimeSerieGroup tsg2 = servicesDatabase.get(selectedServiceID2);
+        int selectedIndex = jTabbedPane1.getSelectedIndex();
+        initTreeView(selectedIndex);
+        initComboBoxes(selectedIndex);
+    }//GEN-LAST:event_jTabbedPane1VetoableChange
 
-        float calculerDistanceQA = tsg1.lireEnUneSeulRequete().calculerDistanceQA(tsg2.lireEnUneSeulRequete());
-        JLBDistanceQA.setText("Distance QA : " + calculerDistanceQA);
-
-        QOSRelation qosr1 = new QOSRelation(tsg1);
-        QOSRelation qosr2 = new QOSRelation(tsg2);
-
-        float QRDistance = Matrice.DistanceQosr(qosr1.distance(qosr2));
-        JLBDistanceQOS.setText("Distance QOS : " + QRDistance);
-
-        float finalDistance = (float) Math.sqrt(QRDistance * calculerDistanceQA);
-
-        JLBDistanceFinal.setText("Distance Finale : " + finalDistance);
-
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jTabbedPane1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1PropertyChange
         // TODO add your handling code here:
-        String clientSelectionner = (String) jComboBoxListClient.getSelectedItem();
-        int selectedClientID = Integer.parseInt(clientSelectionner.substring(1));
-        int index= JCBCompositions.getSelectedIndex();
-        ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(index);
-        TimeSerieGroup Client = servicesDatabase.get(selectedClientID);
-        ArrayList<Float> listDistanceQA = new ArrayList<>();
-        ArrayList<Float> listDistanceQOS = new ArrayList<>();
-        ArrayList<Float> listDistanceFINAL = new ArrayList<>();
-        for (TimeSerieGroup serviceEnCours : servicesDatabase) {
-            float calculerDistanceQA = Client.lireEnUneSeulRequete().calculerDistanceQA(serviceEnCours.lireEnUneSeulRequete());
-            listDistanceQA.add(calculerDistanceQA);
-            QOSRelation qosr1 = new QOSRelation(Client);
-            QOSRelation qosr2 = new QOSRelation(serviceEnCours);
-            float DistanceQosr = Matrice.DistanceQosr(qosr1.distance(qosr2));
-            listDistanceQOS.add(DistanceQosr);
-            float finalDistance = (float) Math.sqrt(DistanceQosr * calculerDistanceQA);
-            
-                listDistanceFINAL.add(finalDistance);
-            
+        int selectedIndex = jTabbedPane1.getSelectedIndex();
+        initTreeView(selectedIndex);
+        initComboBoxes(selectedIndex);
+    }//GEN-LAST:event_jTabbedPane1PropertyChange
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        // TODO add your handling code here:
+        try {
+            int selectedIndex = jTabbedPane1.getSelectedIndex();
+            initTreeView(selectedIndex);
+            initComboBoxes(selectedIndex);
+
+        } catch (Exception e) {
+            ((DefaultComboBoxModel) (jComboBox1.getModel())).removeAllElements();
+            ((DefaultComboBoxModel) (jComboBox2.getModel())).removeAllElements();
+            ((DefaultComboBoxModel) (jComboBoxListClient.getModel())).removeAllElements();
         }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void jButtonAjouter3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouter3ActionPerformed
+        // TODO add your handling code here:
+
+        DefaultTableModel model = (DefaultTableModel) jTableComposition.getModel();
+
+        model.setColumnCount(3);
         
-        float minimalCourant = Float.MAX_VALUE;
-        int candidatGagnant = 0;
-        index = 0;
-        for (Float candidatCourant : listDistanceFINAL) {
-            if (candidatCourant<minimalCourant  && candidatCourant>0) {
-                minimalCourant = candidatCourant;
-                candidatGagnant=index;
+        int rowCount = model.getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            model.removeRow(0);
+        }
+
+        ArrayList<TimeSerieGroup> classe1 = Principal.getServicesDatabase(0);
+        ArrayList<TimeSerieGroup> classe2 = Principal.getServicesDatabase(1);
+        ArrayList<TimeSerieGroup> classe3 = Principal.getServicesDatabase(2);
+        int i = 0, j = 0, k = 0;
+        for (TimeSerieGroup timeSerieGroup : classe1) {
+            for (TimeSerieGroup timeSerieGroup1 : classe2) {
+                for (TimeSerieGroup timeSerieGroup2 : classe3) {
+                    model.addRow(new String[]{"C1-S" + i, "C2-S" + j, "C3-S" + k});
+                    k++;
+                    k = k % classe3.size();
+                }
+                j++;
+                j = j % classe2.size();
             }
-            index++;
+            i++;
+            i = i % classe1.size();
         }
-        
-        
-        JLBMeilleurService.setText("Meilleur Service : S"+candidatGagnant);
-        JLBMeilleurDistanceQA.setText("Distance QA : "+listDistanceQA.get(candidatGagnant));
-        JLBMeilleurDistanceQOS.setText("Distance QOS : "+listDistanceQOS.get(candidatGagnant));
-        JLBMeilleurDistanceFinal.setText("Distance Finale : "+listDistanceFINAL.get(candidatGagnant));
-        
+    }//GEN-LAST:event_jButtonAjouter3ActionPerformed
 
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void JBAddCompositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAddCompositionActionPerformed
+    private void jButtonAjouter4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouter4ActionPerformed
         // TODO add your handling code here:
-        Principal.addServiceComposition();
-        refreshServiceComposition();
-    }//GEN-LAST:event_JBAddCompositionActionPerformed
+        int selectedClass = JOptionPane.showOptionDialog(null,
+                "Choix de La Classe Client", "Veuillez choisir la classe du client",
+                JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                new String[]{"Classe 1", "Classe 2", "Classe 3"}, 0);
 
-    private void JCBCompositionsVetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {//GEN-FIRST:event_JCBCompositionsVetoableChange
-        // TODO add your handling code here:
+        System.out.println("selected Class : " + selectedClass);
+
+        int size = Principal.getServicesDatabase(selectedClass).size();
+        ArrayList servicesList = new ArrayList();
+        for (int i = 0; i < size; i++) {
+            servicesList.add("S" + i);
+        }
+
+        Object[] options = servicesList.toArray();
+        JComboBox optionList = new JComboBox(options);
+        optionList.setSelectedIndex(0);
+        JOptionPane.showMessageDialog(null, optionList, "Title",
+                JOptionPane.QUESTION_MESSAGE);
+        int serviceId = optionList.getSelectedIndex();
+        System.out.println("selected service"+serviceId);
         
-    }//GEN-LAST:event_JCBCompositionsVetoableChange
+        TimeSerieGroup selectedClient = Principal.getServicesDatabase(selectedClass).get(serviceId);
+        DefaultTableModel model = (DefaultTableModel) jTableComposition.getModel();
+        model.setColumnCount(3);
+        
+        int rowCount = jTableComposition.getModel().getRowCount();
+        int columnCount = jTableComposition.getModel().getColumnCount();
+        
+        Vector<Float> values = new  Vector();
+        for (int i = 0; i < rowCount; i++) {
+            float finalDistance = 0;
+            for (int j = 0; j < columnCount; j++) {
+                String compos = (String) jTableComposition.getModel().getValueAt(i, j);
+                String[] split = compos.split("-");
+                
+                int classIndex = Integer.parseInt(split[0].replace("C", ""));
+                int serviceIndex = Integer.parseInt(split[1].replace("S", ""));
+                TimeSerieGroup currentServiceComposition = Principal.getServicesDatabase(classIndex-1).get(serviceIndex);
+                
+                float calculerDistanceQA = selectedClient.lireEnUneSeulRequete().calculerDistanceQA(currentServiceComposition.lireEnUneSeulRequete());
+                
+                
+            QOSRelation qosr1 = new QOSRelation(selectedClient);
+            QOSRelation qosr2 = new QOSRelation(currentServiceComposition);
 
-    private void JCBCompositionsPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_JCBCompositionsPropertyChange
-        // TODO add your handling code here:
-        initTreeView();
-        initComboBoxes();
-    }//GEN-LAST:event_JCBCompositionsPropertyChange
+            float QRDistance = Matrice.DistanceQosr(qosr1.distance(qosr2));
+            //JLBDistanceQOS.setText("Distance QOS : " + QRDistance);
+
+                finalDistance += (float) Math.sqrt(QRDistance * calculerDistanceQA)*0.33;
+
+                
+            }
+            values.add(finalDistance);
+        }
+        model.addColumn("F(c)", values);
+        Vector counter = new Vector();
+        for (int i = 0; i < values.size(); i++) {
+            counter.add(i);
+        }
+        model.addColumn("C(i)", counter);
+        Object[] toArray = values.toArray();
+        Arrays.sort(toArray);
+        DefaultListModel<String> listModel =new DefaultListModel<>();
+        jList1.setModel(listModel);
+        listModel.removeAllElements();
+        for (int i = 0; i < jSlider4.getValue(); i++) {
+            try {
+                
+            Float current = (Float) toArray[values.size()-i-1];
+            for (int j = 0; j < rowCount; j++) {
+                //System.out.println(" current : "+current +" ---- "+jTableComposition.getValueAt(j, 3));
+                if ((""+jTableComposition.getValueAt(j, 3)).equalsIgnoreCase(""+current)) {
+                    listModel.addElement(i+" --> C"+j+"  :  "+current);
+                }
+            }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButtonAjouter4ActionPerformed
     private TimeSerieGroup GenerateTSG(final int TAILLE) {
         TimeSerieGroup tsg = new TimeSerieGroup();
         Random r = new Random();
-        tsg.ajouter(new Query(TAILLE,r));
-        tsg.ajouter(new Query(TAILLE,r));
-        tsg.ajouter(new Query(TAILLE,r));
+        tsg.ajouter(new Query(TAILLE, r));
+        tsg.ajouter(new Query(TAILLE, r));
+        tsg.ajouter(new Query(TAILLE, r));
         return tsg;
     }
 
-    void refreshServiceComposition(){
-        int sizeOfDatabase = Principal.sizeOfDatabase();
-        if (sizeOfDatabase==0) {
-            return;
-        }
-        DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) JCBCompositions.getModel();
-        model.removeAllElements();
-        for (int i = 0; i < sizeOfDatabase; i++) {
-            model.addElement("Service Composition "+i);
-        }
-    }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton JBAddComposition;
-    private javax.swing.JComboBox<String> JCBCompositions;
     private javax.swing.JLabel JLBDistanceFinal;
     private javax.swing.JLabel JLBDistanceQA;
     private javax.swing.JLabel JLBDistanceQA1;
@@ -863,29 +1670,59 @@ public class ServicesView extends javax.swing.JPanel {
     private javax.swing.JLabel JLBService;
     private javax.swing.JLabel JLBServiceValue;
     private javax.swing.JLabel JLBTailleValue;
+    private javax.swing.JLabel JLBTailleValue1;
+    private javax.swing.JLabel JLBTailleValue2;
     private javax.swing.JLabel JLBcout1;
+    private javax.swing.JLabel JLBcout2;
+    private javax.swing.JLabel JLBcout3;
+    private javax.swing.JLabel JLBcout4;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonAjouter;
+    private javax.swing.JButton jButtonAjouter1;
+    private javax.swing.JButton jButtonAjouter2;
+    private javax.swing.JButton jButtonAjouter3;
+    private javax.swing.JButton jButtonAjouter4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBoxListClient;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSlider jSlider1;
+    private javax.swing.JSlider jSlider2;
+    private javax.swing.JSlider jSlider3;
+    private javax.swing.JSlider jSlider4;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableComposition;
     private javax.swing.JTree jTree1;
+    private javax.swing.JTree jTree2;
+    private javax.swing.JTree jTree3;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+    private JTree[] jTrees;
 
-    private void initTreeView() {
+    private void initTreeView(int baseIndex) {
         DefaultMutableTreeNode tn = new DefaultMutableTreeNode("Liste des Services");
-        int index = JCBCompositions.getSelectedIndex();
+        int index = baseIndex;
         ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(index);
         index = 0;
         for (TimeSerieGroup timeSerieGroup : servicesDatabase) {
@@ -909,8 +1746,6 @@ public class ServicesView extends javax.swing.JPanel {
 
         }
         final DefaultTreeModel defaultTreeModel = new DefaultTreeModel(tn);
-        jTree1.setModel(defaultTreeModel);
+        jTrees[baseIndex].setModel(defaultTreeModel);
     }
 }
-
-

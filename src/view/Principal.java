@@ -37,6 +37,8 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         addServiceComposition();
+        addServiceComposition();
+        addServiceComposition();
         servicesView = new ServicesView();
         clientView = new ClientView();
         content.setLayout(new GridLayout());
