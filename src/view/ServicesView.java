@@ -41,10 +41,18 @@ public class ServicesView extends javax.swing.JPanel {
         DefaultComboBoxModel<String> model;
         model = (DefaultComboBoxModel<String>) jComboBox1.getModel();
         model.removeAllElements();
-        ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(boxesIndex);
+        ArrayList<TimeSerieGroup> servicesDatabase;
         int i = 0;
+        String name;
+        if (boxesIndex < 3) {
+            servicesDatabase = Principal.getServicesDatabase(boxesIndex);
+            name = "s";
+        } else {
+            servicesDatabase = listAgregation;
+            name = "C";
+        }
         for (TimeSerieGroup timeSerieGroup : servicesDatabase) {
-            model.addElement("s" + i);
+            model.addElement(name + i);
             i++;
         }
 
@@ -53,7 +61,7 @@ public class ServicesView extends javax.swing.JPanel {
         model1.removeAllElements();
         i = 0;
         for (TimeSerieGroup timeSerieGroup : servicesDatabase) {
-            model1.addElement("s" + i);
+            model1.addElement(name + i);
             i++;
         }
 
@@ -61,7 +69,7 @@ public class ServicesView extends javax.swing.JPanel {
         modelClient.removeAllElements();
         i = 0;
         for (TimeSerieGroup timeSerieGroup : servicesDatabase) {
-            modelClient.addElement("s" + i);
+            modelClient.addElement(name + i);
             i++;
         }
 
@@ -899,15 +907,18 @@ public class ServicesView extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3)
                     .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(JLBTailleValue1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JLBcout2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonAjouter1)))
+                        .addComponent(jButtonAjouter1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(4, 4, 4))
         );
         jPanel5Layout.setVerticalGroup(
@@ -1226,6 +1237,11 @@ public class ServicesView extends javax.swing.JPanel {
         jTableComposition.setGridColor(new java.awt.Color(91, 68, 131));
         jTableComposition.setSelectionBackground(new java.awt.Color(53, 76, 99));
         jTableComposition.setShowVerticalLines(false);
+        jTableComposition.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableCompositionMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(jTableComposition);
         if (jTableComposition.getColumnModel().getColumnCount() > 0) {
             jTableComposition.getColumnModel().getColumn(0).setResizable(false);
@@ -1305,7 +1321,7 @@ public class ServicesView extends javax.swing.JPanel {
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1331,7 +1347,12 @@ public class ServicesView extends javax.swing.JPanel {
             int selectedServiceID2 = Integer.parseInt(selectedService2.substring(1));
             int index = jTabbedPane1.getSelectedIndex();
 
-            ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(index);
+            ArrayList<TimeSerieGroup> servicesDatabase;
+            if (index < 3) {
+                servicesDatabase = Principal.getServicesDatabase(index);
+            } else {
+                servicesDatabase = listAgregation;
+            }
             TimeSerieGroup tsg1 = servicesDatabase.get(selectedServiceID);
             TimeSerieGroup tsg2 = servicesDatabase.get(selectedServiceID2);
 
@@ -1348,6 +1369,7 @@ public class ServicesView extends javax.swing.JPanel {
 
             JLBDistanceFinal.setText("Distance Finale : " + finalDistance);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1357,7 +1379,13 @@ public class ServicesView extends javax.swing.JPanel {
             String clientSelectionner = (String) jComboBoxListClient.getSelectedItem();
             int selectedClientID = Integer.parseInt(clientSelectionner.substring(1));
             int index = jTabbedPane1.getSelectedIndex();
-            ArrayList<TimeSerieGroup> servicesDatabase = Principal.getServicesDatabase(index);
+
+            ArrayList<TimeSerieGroup> servicesDatabase;
+            if (index < 3) {
+                servicesDatabase = Principal.getServicesDatabase(index);
+            } else {
+                servicesDatabase = listAgregation;
+            }
             TimeSerieGroup Client = servicesDatabase.get(selectedClientID);
             ArrayList<Float> listDistanceQA = new ArrayList<>();
             ArrayList<Float> listDistanceQOS = new ArrayList<>();
@@ -1397,7 +1425,7 @@ public class ServicesView extends javax.swing.JPanel {
 
     private void jButtonAjouter2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouter2ActionPerformed
         int index = 2;
-        for (int i = 0; i < jSlider1.getValue(); i++) {
+        for (int i = 0; i < jSlider3.getValue(); i++) {
             Principal.getServicesDatabase(index).add(GenerateTSG(150));
 
         }
@@ -1408,12 +1436,12 @@ public class ServicesView extends javax.swing.JPanel {
 
     private void jTree3ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTree3ValueChanged
         // TODO add your handling code here:
-        jTreeMouseEvent(evt);
+        jTreeMouseEvent(evt, 2);
     }//GEN-LAST:event_jTree3ValueChanged
 
     private void jButtonAjouter1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouter1ActionPerformed
         int index = 1;
-        for (int i = 0; i < jSlider1.getValue(); i++) {
+        for (int i = 0; i < jSlider2.getValue(); i++) {
             Principal.getServicesDatabase(index).add(GenerateTSG(150));
 
         }
@@ -1424,7 +1452,7 @@ public class ServicesView extends javax.swing.JPanel {
 
     private void jTree2ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTree2ValueChanged
         // TODO add your handling code here:
-        jTreeMouseEvent(evt);
+        jTreeMouseEvent(evt, 1);
 
     }//GEN-LAST:event_jTree2ValueChanged
 
@@ -1442,10 +1470,10 @@ public class ServicesView extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonAjouterActionPerformed
 
     private void jTree1ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTree1ValueChanged
-        jTreeMouseEvent(evt);
+        jTreeMouseEvent(evt, 0);
     }//GEN-LAST:event_jTree1ValueChanged
 
-    private void jTreeMouseEvent(TreeSelectionEvent evt) {
+    private void jTreeMouseEvent(TreeSelectionEvent evt, int currentIndex) {
         // TODO add your handling code here:
         TreePath tp = evt.getNewLeadSelectionPath();
         if (tp != null) {
@@ -1457,7 +1485,7 @@ public class ServicesView extends javax.swing.JPanel {
                     try {
                         int selectedServiceID = Integer.parseInt(selectedService.substring(1));
                         System.out.println("selected id = " + selectedServiceID);
-                        int index = 0;
+                        int index = currentIndex;
                         TimeSerieGroup tsg = Principal.getServicesDatabase(index).get(selectedServiceID);
                         ArrayList<Query> lireToutesLesRequetes = tsg.lireToutesLesRequetes();
                         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -1523,23 +1551,27 @@ public class ServicesView extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             int selectedIndex = jTabbedPane1.getSelectedIndex();
-            initTreeView(selectedIndex);
             initComboBoxes(selectedIndex);
+            initTreeView(selectedIndex);
 
         } catch (Exception e) {
-            ((DefaultComboBoxModel) (jComboBox1.getModel())).removeAllElements();
-            ((DefaultComboBoxModel) (jComboBox2.getModel())).removeAllElements();
-            ((DefaultComboBoxModel) (jComboBoxListClient.getModel())).removeAllElements();
+            e.printStackTrace();
+            if (listAgregation == null) {
+
+                ((DefaultComboBoxModel) (jComboBox1.getModel())).removeAllElements();
+                ((DefaultComboBoxModel) (jComboBox2.getModel())).removeAllElements();
+                ((DefaultComboBoxModel) (jComboBoxListClient.getModel())).removeAllElements();
+            }
         }
     }//GEN-LAST:event_jTabbedPane1StateChanged
-
+    ArrayList<TimeSerieGroup> listAgregation;
     private void jButtonAjouter3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouter3ActionPerformed
         // TODO add your handling code here:
-
+        listAgregation = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) jTableComposition.getModel();
 
         model.setColumnCount(3);
-        
+
         int rowCount = model.getRowCount();
         for (int i = 0; i < rowCount; i++) {
             model.removeRow(0);
@@ -1549,9 +1581,53 @@ public class ServicesView extends javax.swing.JPanel {
         ArrayList<TimeSerieGroup> classe2 = Principal.getServicesDatabase(1);
         ArrayList<TimeSerieGroup> classe3 = Principal.getServicesDatabase(2);
         int i = 0, j = 0, k = 0;
-        for (TimeSerieGroup timeSerieGroup : classe1) {
-            for (TimeSerieGroup timeSerieGroup1 : classe2) {
-                for (TimeSerieGroup timeSerieGroup2 : classe3) {
+        for (TimeSerieGroup tsg1 : classe1) {
+            for (TimeSerieGroup tsg2 : classe2) {
+                for (TimeSerieGroup tsg3 : classe3) {
+
+                    TimeSerieGroup tsgAgreeg = new TimeSerieGroup();
+                    Query debit = new Query();
+                    Query debitTSG1 = tsg1.lire(0);
+                    Query debitTSG2 = tsg2.lire(0);
+                    Query debitTSG3 = tsg3.lire(0);
+
+                    for (int l = 0; l < debitTSG1.size(); l++) {
+                        TimeSerie serie = debitTSG1.lire(l);
+                        if (serie.getX() > debitTSG2.lire(l).getX()) {
+                            serie = debitTSG2.lire(l);
+                        }
+                        if (serie.getX() > debitTSG3.lire(l).getX()) {
+                            serie = debitTSG3.lire(l);
+                        }
+                        debit.ajouter(serie);
+                    }
+                    tsgAgreeg.ajouter(debit);
+
+                    Query reput = new Query();
+                    Query reputTSG1 = tsg1.lire(1);
+                    Query reputTSG2 = tsg2.lire(1);
+                    Query reputTSG3 = tsg3.lire(1);
+
+                    for (int l = 0; l < reputTSG1.size(); l++) {
+                        TimeSerie serie = new TimeSerie(reputTSG1.lire(l).getX() * reputTSG2.lire(l).getX() * reputTSG3.lire(l).getX(), l);
+                        reput.ajouter(serie);
+                    }
+                    tsgAgreeg.ajouter(reput);
+
+                    Query cout = new Query();
+                    Query coutTSG1 = tsg1.lire(2);
+                    Query coutTSG2 = tsg2.lire(2);
+                    Query coutTSG3 = tsg3.lire(2);
+
+                    for (int l = 0; l < reputTSG1.size(); l++) {
+                        TimeSerie serie = new TimeSerie(coutTSG1.lire(l).getX() + coutTSG2.lire(l).getX() + coutTSG3.lire(l).getX(), l);
+                        cout.ajouter(serie);
+                    }
+
+                    tsgAgreeg.ajouter(cout);
+
+                    listAgregation.add(tsgAgreeg);
+
                     model.addRow(new String[]{"C1-S" + i, "C2-S" + j, "C3-S" + k});
                     k++;
                     k = k % classe3.size();
@@ -1561,62 +1637,26 @@ public class ServicesView extends javax.swing.JPanel {
             }
             i++;
             i = i % classe1.size();
+            initComboBoxes(4);
         }
     }//GEN-LAST:event_jButtonAjouter3ActionPerformed
 
     private void jButtonAjouter4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouter4ActionPerformed
         // TODO add your handling code here:
-        int selectedClass = JOptionPane.showOptionDialog(null,
-                "Choix de La Classe Client", "Veuillez choisir la classe du client",
-                JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                new String[]{"Classe 1", "Classe 2", "Classe 3"}, 0);
 
-        System.out.println("selected Class : " + selectedClass);
-
-        int size = Principal.getServicesDatabase(selectedClass).size();
-        ArrayList servicesList = new ArrayList();
-        for (int i = 0; i < size; i++) {
-            servicesList.add("S" + i);
-        }
-
-        Object[] options = servicesList.toArray();
-        JComboBox optionList = new JComboBox(options);
-        optionList.setSelectedIndex(0);
-        JOptionPane.showMessageDialog(null, optionList, "Title",
-                JOptionPane.QUESTION_MESSAGE);
-        int serviceId = optionList.getSelectedIndex();
-        System.out.println("selected service"+serviceId);
-        
-        TimeSerieGroup selectedClient = Principal.getServicesDatabase(selectedClass).get(serviceId);
+        Vector<Float> values = new Vector();
         DefaultTableModel model = (DefaultTableModel) jTableComposition.getModel();
-        model.setColumnCount(3);
-        
-        int rowCount = jTableComposition.getModel().getRowCount();
-        int columnCount = jTableComposition.getModel().getColumnCount();
-        
-        Vector<Float> values = new  Vector();
-        for (int i = 0; i < rowCount; i++) {
+        for (int i = 0; i < listAgregation.size(); i++) {
             float finalDistance = 0;
-            for (int j = 0; j < columnCount; j++) {
-                String compos = (String) jTableComposition.getModel().getValueAt(i, j);
-                String[] split = compos.split("-");
-                
-                int classIndex = Integer.parseInt(split[0].replace("C", ""));
-                int serviceIndex = Integer.parseInt(split[1].replace("S", ""));
-                TimeSerieGroup currentServiceComposition = Principal.getServicesDatabase(classIndex-1).get(serviceIndex);
-                
-                float calculerDistanceQA = selectedClient.lireEnUneSeulRequete().calculerDistanceQA(currentServiceComposition.lireEnUneSeulRequete());
-                
-                
-            QOSRelation qosr1 = new QOSRelation(selectedClient);
-            QOSRelation qosr2 = new QOSRelation(currentServiceComposition);
+            for (int j = 0; j < 3; j++) {
+                float distance = 0;
 
-            float QRDistance = Matrice.DistanceQosr(qosr1.distance(qosr2));
-            //JLBDistanceQOS.setText("Distance QOS : " + QRDistance);
-
-                finalDistance += (float) Math.sqrt(QRDistance * calculerDistanceQA)*0.33;
-
-                
+                Query lire = listAgregation.get(i).lire(j);
+                for (int k = 0; k < lire.size(); k++) {
+                    distance += lire.lire(k).getX();
+                }
+                distance *= 0.33;
+                finalDistance += distance;
             }
             values.add(finalDistance);
         }
@@ -1628,24 +1668,68 @@ public class ServicesView extends javax.swing.JPanel {
         model.addColumn("C(i)", counter);
         Object[] toArray = values.toArray();
         Arrays.sort(toArray);
-        DefaultListModel<String> listModel =new DefaultListModel<>();
+        DefaultListModel<String> listModel = new DefaultListModel<>();
         jList1.setModel(listModel);
         listModel.removeAllElements();
         for (int i = 0; i < jSlider4.getValue(); i++) {
             try {
-                
-            Float current = (Float) toArray[values.size()-i-1];
-            for (int j = 0; j < rowCount; j++) {
-                //System.out.println(" current : "+current +" ---- "+jTableComposition.getValueAt(j, 3));
-                if ((""+jTableComposition.getValueAt(j, 3)).equalsIgnoreCase(""+current)) {
-                    listModel.addElement(i+" --> C"+j+"  :  "+current);
+
+                Float current = (Float) toArray[values.size() - i - 1];
+                for (int j = 0; j < listAgregation.size(); j++) {
+                    //System.out.println(" current : "+current +" ---- "+jTableComposition.getValueAt(j, 3));
+                    if (("" + jTableComposition.getValueAt(j, 3)).equalsIgnoreCase("" + current)) {
+                        listModel.addElement(i + " --> C" + j + "  :  " + current);
+                    }
                 }
-            }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }//GEN-LAST:event_jButtonAjouter4ActionPerformed
+
+    private void jTableCompositionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableCompositionMouseClicked
+        // TODO add your handling code here:
+        try {
+            TimeSerieGroup tsg = listAgregation.get(jTableComposition.getSelectedRow());
+            ArrayList<Query> lireToutesLesRequetes = tsg.lireToutesLesRequetes();
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            model.setColumnCount(0);
+            Vector debitVector;
+
+            debitVector = new Vector();
+            Query querydebit = lireToutesLesRequetes.get(0);
+            for (int i = 0; i < querydebit.size(); i++) {
+                debitVector.add(i);
+            }
+            model.addColumn("Temps", debitVector);
+
+            debitVector = new Vector();
+            for (int i = 0; i < querydebit.size(); i++) {
+                TimeSerie lire = querydebit.lire(i);
+                debitVector.add(lire.getX());
+            }
+            model.addColumn("Débit", debitVector);
+
+            debitVector = new Vector();
+            Query queryReput = lireToutesLesRequetes.get(1);
+            for (int i = 0; i < queryReput.size(); i++) {
+                TimeSerie lire = queryReput.lire(i);
+                debitVector.add(lire.getX());
+            }
+            model.addColumn("Réputation", debitVector);
+
+            debitVector = new Vector();
+            Query query = lireToutesLesRequetes.get(2);
+            for (int i = 0; i < query.size(); i++) {
+                TimeSerie lire = query.lire(i);
+                debitVector.add(lire.getX());
+            }
+            model.addColumn("Cout", debitVector);
+
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jTableCompositionMouseClicked
     private TimeSerieGroup GenerateTSG(final int TAILLE) {
         TimeSerieGroup tsg = new TimeSerieGroup();
         Random r = new Random();
@@ -1702,7 +1786,6 @@ public class ServicesView extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
@@ -1749,3 +1832,5 @@ public class ServicesView extends javax.swing.JPanel {
         jTrees[baseIndex].setModel(defaultTreeModel);
     }
 }
+
+
